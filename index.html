@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://bootswatch.com/4/solar/bootstrap.min.css"
+    />
+    <link rel="stylesheet" href="style.css" />
+    <script src="https://cdn.jsdelivr.net/jsbarcode/3.6.0/barcodes/JsBarcode.code128.min.js"></script>
+    <title>Unitech Generate Bluetooth SPP Barcode Tool</title>
+  </head>
+  <body>
+    <div class="container">
+      <div class="tool-form">
+        <div class="form-group">
+          <label for="bt-mac">Bluetooth MAC Address:</label>
+          <input
+            type="text"
+            class="form-control"
+            id="bt-mac"
+            placeholder="Specify Bluetooth MAC Address to connect to here"
+          />
+        </div>
+        <button
+          type="button"
+          class="btn-gen btn btn-primary"
+          onclick="genBarcode()"
+        >
+          Generate
+        </button>
+        <h2 class="heading">Step 1</h2>
+        <img class="barcode" id="btSPPBarcode" />
+        <p class="barcode-description">BT SPP</p>
+        <script>
+          JsBarcode("#btSPPBarcode", "//1", {
+            width: 3,
+            height: 150,
+            margin: 80,
+            marginTop: 30,
+            marginBottom: 30,
+            displayValue: false,
+          });
+        </script>
+        <h2 class="step-2-heading heading" id="step2">Step 2</h2>
+        <img bclass="barcode" id="btMacBarcode" />
+        <p id="macAddr"></p>
+      </div>
+    </div>
+  </body>
+</html>
+
+<script>
+  function genBarcode() {
+    let btMacAddrString = document.getElementById("bt-mac").value;
+    let formattedString = btMacAddrString.replace(/[-:\s]/g, "");
+    formattedString = formattedString.toUpperCase();
+
+    console.log(formattedString);
+    if (formattedString.length > 12 || formattedString.length < 12) {
+      alert("BT MAC Address Length is Invalid");
+      document.getElementById("bt-mac").value = "";
+    } else {
+      //Check BT MAC Format
+      if (/^([0-9A-F]{2}){5}([0-9A-F]{2})$/g.test(formattedString)) {
+        document.getElementById("step2").style.display = "block";
+        JsBarcode("#btMacBarcode", "//.A" + formattedString, {
+          marginTop: 30,
+          marginBottom: 30,
+          margin: 80,
+          displayValue: false,
+        });
+        document.getElementById("macAddr").innerHTML =
+          "Bluetooth MAC Address: " +
+          formattedString.slice(0, 2) +
+          ":" +
+          formattedString.slice(2, 4) +
+          ":" +
+          formattedString.slice(4, 6) +
+          ":" +
+          formattedString.slice(6, 8) +
+          ":" +
+          formattedString.slice(8, 10) +
+          ":" +
+          formattedString.slice(10);
+      } else {
+        alert("Invalid Character in BT MAC Address!");
+        document.getElementById("bt-mac").value = "";
+      }
+    }
+  }
+</script>
