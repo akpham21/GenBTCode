@@ -60,7 +60,6 @@
     console.log(formattedString);
     if (formattedString.length > 12 || formattedString.length < 12) {
       alert("BT MAC Address Length is Invalid");
-      document.getElementById("bt-mac").value = "";
     } else {
       //Check BT MAC Format
       if (/^([0-9A-F]{2}){5}([0-9A-F]{2})$/g.test(formattedString)) {
@@ -86,7 +85,6 @@
           formattedString.slice(10);
       } else {
         alert("Invalid Character in BT MAC Address!");
-        document.getElementById("bt-mac").value = "";
       }
     }
   }
